@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>College Explorer — TNEA Counsellor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#f05a22;--orange-light:#ff7043;--orange-pale:#fff3ee;
+  --blue:#1a3c8f;--blue-light:#e8eeff;--blue-mid:#2e5fd4;
+  --green:#16a34a;--green-pale:#f0fdf4;
+  --text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;
+  --white:#ffffff;--bg:#f8f9fc;
+  --font:'Plus Jakarta Sans',sans-serif;--serif:'Fraunces',serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text)}
+
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 5vw;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--orange-light));display:grid;place-items:center;font-size:1.1rem}
+.logo-text{font-weight:800;font-size:1.1rem;color:var(--text)}
+.logo-text span{color:var(--orange)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:8px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{background:var(--orange-pale);color:var(--orange)}
+
+.search-bar-wrap{background:var(--white);border-bottom:1px solid var(--border);padding:14px 5vw;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.search-bar-inner{display:flex;flex:1;min-width:260px;max-width:640px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.search-bar-inner:focus-within{border-color:var(--blue)}
+.search-bar-inner input{flex:1;border:none;outline:none;padding:11px 16px;font-family:var(--font);font-size:.92rem;background:transparent;color:var(--text)}
+.search-bar-inner button{background:var(--blue);color:#fff;border:none;padding:0 22px;font-weight:700;font-size:.88rem;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:background .2s}
+.search-bar-inner button:hover{background:var(--blue-mid)}
+.breadcrumb{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px;flex-shrink:0}
+.breadcrumb a{color:var(--muted);text-decoration:none}
+.breadcrumb a:hover{color:var(--orange)}
+
+.landing-section{padding:60px 5vw;text-align:center}
+.landing-section h2{font-family:var(--serif);font-size:2rem;font-weight:900;margin-bottom:10px}
+.landing-section h2 span{color:var(--orange)}
+.landing-section p{color:var(--muted);margin-bottom:36px}
+.popular-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;max-width:1000px;margin:0 auto;text-align:left}
+.pop-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px}
+.pop-card:hover{border-color:var(--orange);box-shadow:0 4px 20px rgba(240,90,34,.1);transform:translateY(-2px)}
+.pop-icon{width:42px;height:42px;border-radius:10px;background:var(--orange-pale);display:grid;place-items:center;font-size:1.2rem;flex-shrink:0}
+.pop-name{font-weight:700;font-size:.85rem;line-height:1.3}
+.pop-meta{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+.loading-wrap{display:none;padding:80px 5vw;text-align:center}
+.spinner-ring{width:52px;height:52px;border-radius:50%;border:4px solid var(--border);border-top-color:var(--orange);animation:spin .7s linear infinite;margin:0 auto 18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-wrap p{color:var(--muted);font-size:.95rem}
+.loading-steps{display:flex;justify-content:center;gap:16px;margin-top:24px;flex-wrap:wrap}
+.ls{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);padding:8px 16px;background:var(--white);border-radius:99px;border:1px solid var(--border)}
+.ls.active{color:var(--orange);border-color:var(--orange);background:var(--orange-pale)}
+.ls.done{color:var(--green);border-color:#bbf7d0;background:var(--green-pale)}
+
+.error-wrap{display:none;padding:60px 5vw;text-align:center}
+.error-wrap h3{font-family:var(--serif);font-size:1.5rem;margin-bottom:8px}
+.error-wrap p{color:var(--muted);margin-bottom:20px}
+
+#collegeProfile{display:none}
+
+.college-hero{background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:36px 5vw 0;position:relative;overflow:hidden}
+.college-hero::after{content:'';position:absolute;top:-40px;right:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(240,90,34,.2) 0%,transparent 70%);pointer-events:none}
+.ch-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.ch-top{display:flex;align-items:flex-start;gap:20px;margin-bottom:20px;flex-wrap:wrap}
+.college-logo{width:72px;height:72px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--blue-mid));display:grid;place-items:center;font-size:2rem;flex-shrink:0;border:3px solid rgba(255,255,255,.15)}
+.ch-info{flex:1;min-width:200px}
+.ch-info h1{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2rem);font-weight:900;color:#fff;line-height:1.2}
+.ch-short{font-size:.85rem;color:rgba(255,255,255,.5);margin-top:2px}
+.ch-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.badge{padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:700;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8)}
+.badge.govt{background:rgba(22,163,74,.2);border-color:rgba(22,163,74,.4);color:#86efac}
+.badge.private{background:rgba(240,90,34,.2);border-color:rgba(240,90,34,.3);color:#fdb7a0}
+.badge.autonomous{background:rgba(26,60,143,.3);border-color:rgba(26,60,143,.4);color:#a5b4fc}
+.badge.naac{background:rgba(234,179,8,.2);border-color:rgba(234,179,8,.3);color:#fef08a}
+.ch-stats{display:flex;background:rgba(255,255,255,.06);border-radius:12px 12px 0 0;border:1px solid rgba(255,255,255,.1);border-bottom:none}
+.ch-stat{flex:1;padding:16px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.ch-stat:last-child{border-right:none}
+.ch-stat-num{font-family:var(--serif);font-size:1.4rem;font-weight:900;color:#fff}
+.ch-stat-lbl{font-size:.68rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+.tabs-wrap{background:var(--white);border-bottom:2px solid var(--border);padding:0 5vw;position:sticky;top:64px;z-index:100}
+.tabs{display:flex;max-width:1100px;margin:0 auto;overflow-x:auto}
+.tab{padding:14px 24px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;margin-bottom:-2px;text-decoration:none;display:inline-block}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+.profile-body{max-width:1100px;margin:0 auto;padding:32px 5vw 64px;display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start}
+@media(max-width:900px){.profile-body{grid-template-columns:1fr}}
+
+.section-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px 26px;margin-bottom:22px}
+.sc-title{font-family:var(--serif);font-size:1.15rem;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.sc-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-size:.9rem;flex-shrink:0}
+.overview-text{color:var(--text);font-size:.9rem;line-height:1.8}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:600px){.info-grid{grid-template-columns:1fr}}
+.info-row{padding:10px 0;border-bottom:1px solid #f3f4f6;display:flex;flex-direction:column;gap:2px}
+.info-row:last-child{border-bottom:none}
+.info-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.info-value{font-size:.9rem;font-weight:600;color:var(--text)}
+
+.facilities-wrap{display:flex;flex-wrap:wrap;gap:10px}
+.facility-tag{background:var(--blue-light);color:var(--blue);border:1px solid #c7d7f5;padding:6px 14px;border-radius:8px;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:6px}
+
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.pros-cons{grid-template-columns:1fr}}
+.pros-box{background:var(--green-pale);border:1px solid #bbf7d0;border-radius:10px;padding:14px 16px}
+.cons-box{background:#fff1f3;border:1px solid #fecdd3;border-radius:10px;padding:14px 16px}
+.pc-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.pros-box .pc-title{color:var(--green)}
+.cons-box .pc-title{color:#e11d48}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.pc-list li{font-size:.83rem;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.pc-dot{width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-size:.65rem;flex-shrink:0;margin-top:1px}
+.pros-box .pc-dot{background:#bbf7d0;color:var(--green)}
+.cons-box .pc-dot{background:#fecdd3;color:#e11d48}
+
+.sidebar-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px}
+.sidebar-title{font-weight:800;font-size:.88rem;margin-bottom:14px;color:var(--text)}
+.qi-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:.83rem}
+.qi-row:last-child{border-bottom:none}
+.qi-label{color:var(--muted)}
+.qi-value{font-weight:700;color:var(--text)}
+.rank-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:.83rem}
+.rank-row:last-child{border-bottom:none}
+.rank-src{color:var(--muted)}
+.rank-val{font-weight:800;color:var(--blue)}
+.nearby-list{display:flex;flex-direction:column;gap:8px}
+.nearby-item{background:var(--bg);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;font-size:.83rem;font-weight:600;display:flex;align-items:center;gap:8px}
+.nearby-item:hover{background:var(--orange-pale);color:var(--orange)}
+.cta-card{background:linear-gradient(135deg,var(--blue),var(--blue-mid));border-radius:14px;padding:22px;text-align:center;color:#fff;margin-bottom:18px}
+.cta-card h3{font-family:var(--serif);font-size:1.1rem;font-weight:900;margin-bottom:6px}
+.cta-card p{font-size:.78rem;opacity:.7;margin-bottom:16px;line-height:1.5}
+.btn-cta{display:block;border-radius:8px;padding:11px;font-family:var(--font);font-size:.88rem;font-weight:700;cursor:pointer;text-decoration:none;transition:opacity .2s;margin-bottom:8px;text-align:center;border:none}
+.btn-cta.orange{background:var(--orange);color:#fff}
+.btn-cta.ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.btn-cta:hover{opacity:.85}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">🎓</div>
+    <div class="logo-text">TNEA<span>Counsellor</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/predictor">Predictor</a>
+    <a href="/chatbot">AI Chat</a>
+    <a href="/college-search" class="active">College Explorer</a>
+  </div>
+</nav>
+
+<div class="search-bar-wrap">
+  <div class="breadcrumb"><a href="/">Home</a> / <span>College Explorer</span></div>
+  <div class="search-bar-inner">
+    <input type="text" id="topSearch" placeholder="Search any college in Tamil Nadu…" autocomplete="off"/>
+    <button onclick="doSearch()">Search</button>
+  </div>
+</div>
+
+<!-- LANDING -->
+<div id="landingState" class="landing-section" style="display:none">
+  <h2>Explore <span>Engineering Colleges</span></h2>
+  <p>Search any college to view its overview, rankings, facilities, pros &amp; cons and more</p>
+  <div class="popular-grid" id="popularGrid"></div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-wrap" id="loadingWrap">
+  <div class="spinner-ring"></div>
+  <p>Fetching college details…</p>
+  <div class="loading-steps">
+    <div class="ls active" id="ls1">🔍 Finding college</div>
+    <div class="ls" id="ls2">📖 Loading overview</div>
+    <div class="ls" id="ls3">🏆 Fetching rankings</div>
+    <div class="ls" id="ls4">✅ Building profile</div>
+  </div>
+</div>
+
+<!-- ERROR -->
+<div class="error-wrap" id="errorWrap">
+  <div style="font-size:3rem;margin-bottom:12px">😕</div>
+  <h3>Couldn't load college details</h3>
+  <p id="errorMsg">Something went wrong. Please try again.</p>
+  <button onclick="doSearch()" style="background:var(--orange);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-family:var(--font);font-weight:700;cursor:pointer;font-size:.9rem">Retry</button>
+</div>
+
+<!-- PROFILE -->
+<div id="collegeProfile">
+
+  <div class="college-hero">
+    <div class="ch-inner">
+      <div class="ch-top">
+        <div class="college-logo">🏛️</div>
+        <div class="ch-info">
+          <h1 id="chName"></h1>
+          <div class="ch-short" id="chShort"></div>
+          <div class="ch-badges" id="chBadges"></div>
+        </div>
+      </div>
+      <div class="ch-stats" id="chStats"></div>
+    </div>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <a class="tab active" href="#" onclick="return tabTo('sec-overview',  this)">Overview</a>
+      <a class="tab"        href="#" onclick="return tabTo('sec-facilities', this)">Facilities</a>
+      <a class="tab"        href="#" onclick="return tabTo('sec-proscons',   this)">Pros &amp; Cons</a>
+    </div>
+  </div>
+
+  <div class="profile-body">
+
+    <div class="profile-main">
+
+      <!-- Overview -->
+      <div id="sec-overview" class="section-card">
+        <div class="sc-title">
+          <div class="sc-icon" style="background:#e8eeff">ℹ️</div>
+          About the College
+        </div>
+        <p class="overview-text" id="overviewText"></p>
+        <div class="info-grid" id="infoGrid" style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px"></div>
+      </div>
+
+      <!-- Facilities -->
+      <div id="sec-facilities" class="section-card">
+        <div class="sc-title">
+          <div class="sc-icon" style="background:#e8eeff">🏫</div>
+          Campus Facilities
+        </div>
+        <div class="facilities-wrap" id="facilitiesWrap"></div>
+      </div>
+
+      <!-- Pros & Cons -->
+      <div id="sec-proscons" class="section-card">
+        <div class="sc-title">
+          <div class="sc-icon" style="background:#f0fdf4">⚖️</div>
+          Pros &amp; Cons
+        </div>
+        <div class="pros-cons" id="prosCons"></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">📋 Quick Info</div>
+        <div id="quickInfo"></div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">🏆 Rankings</div>
+        <div id="rankingsContent"></div>
+      </div>
+
+      <div class="cta-card">
+        <h3>Check Your Eligibility</h3>
+        <p>Enter your TNEA cutoff to see if you qualify for this college</p>
+        <a href="/predictor" class="btn-cta orange">🎯 Try Predictor</a>
+        <a href="/chatbot"   class="btn-cta ghost">💬 Ask AI Counsellor</a>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">🗺️ Nearby Colleges</div>
+        <div class="nearby-list" id="nearbyList"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const currentQuery = params.get('q') || '';
+document.getElementById('topSearch').value = currentQuery;
+
+const POPULAR = [
+  {name:'PSG College of Technology, Coimbatore',        icon:'🏛️',meta:'Coimbatore · Autonomous'},
+  {name:'Coimbatore Institute of Technology',           icon:'🎓',meta:'Coimbatore · Govt-Aided'},
+  {name:'Government College of Technology, Coimbatore', icon:'🏫',meta:'Coimbatore · Government'},
+  {name:'SSN College of Engineering, Chennai',          icon:'🏆',meta:'Chennai · Autonomous'},
+  {name:'NIT Trichy',                                   icon:'🌟',meta:'Tiruchirappalli · NIT'},
+  {name:'Thiagarajar College of Engineering, Madurai',  icon:'⚙️',meta:'Madurai · Autonomous'},
+  {name:'Kongu Engineering College, Erode',             icon:'🔬',meta:'Erode · Autonomous'},
+  {name:'Kumaraguru College of Technology, Coimbatore', icon:'💡',meta:'Coimbatore · Autonomous'},
+];
+
+if (currentQuery) {
+  fetchDetails(currentQuery);
+} else {
+  showLanding();
+}
+
+function esc(s){ return s.replace(/'/g,"\\'"); }
+
+function showLanding(){
+  document.getElementById('landingState').style.display = 'block';
+  document.getElementById('popularGrid').innerHTML = POPULAR.map(c=>`
+    <div class="pop-card" onclick="goto('${esc(c.name)}')">
+      <div class="pop-icon">${c.icon}</div>
+      <div><div class="pop-name">${c.name}</div><div class="pop-meta">${c.meta}</div></div>
+    </div>`).join('');
+}
+
+function goto(name){ window.location.href = '/college-search?q='+encodeURIComponent(name); }
+
+function doSearch(){
+  const q = document.getElementById('topSearch').value.trim();
+  if(q) window.location.href = '/college-search?q='+encodeURIComponent(q);
+}
+
+document.getElementById('topSearch').addEventListener('keydown',e=>{ if(e.key==='Enter') doSearch(); });
+
+async function fetchDetails(name){
+  document.getElementById('landingState').style.display   = 'none';
+  document.getElementById('loadingWrap').style.display    = 'block';
+  document.getElementById('errorWrap').style.display      = 'none';
+  document.getElementById('collegeProfile').style.display = 'none';
+
+  const steps = ['ls1','ls2','ls3','ls4'];
+  let si = 0;
+  const t = setInterval(()=>{
+    if(si>0){ document.getElementById(steps[si-1]).classList.remove('active'); document.getElementById(steps[si-1]).classList.add('done'); }
+    if(si<steps.length){ document.getElementById(steps[si]).classList.add('active'); si++; }
+    else clearInterval(t);
+  }, 900);
+
+  try{
+    const res  = await fetch('/api/college-details',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({college:name})});
+    const json = await res.json();
+    clearInterval(t);
+    if(json.error){ showErr(json.error); return; }
+    render(json.data);
+  }catch(e){ clearInterval(t); showErr('Could not connect to server. Please try again.'); }
+}
+
+function showErr(msg){
+  document.getElementById('loadingWrap').style.display = 'none';
+  document.getElementById('errorWrap').style.display   = 'block';
+  document.getElementById('errorMsg').textContent      = msg;
+}
+
+function render(d){
+  document.getElementById('loadingWrap').style.display    = 'none';
+  document.getElementById('collegeProfile').style.display = 'block';
+  document.title = (d.full_name||'College')+' — TNEA Counsellor';
+
+  document.getElementById('chName').textContent  = d.full_name||'';
+  document.getElementById('chShort').textContent = d.short_name ? `"${d.short_name}" · ${d.location}` : (d.location||'');
+
+  const typeCls = (d.type||'').toLowerCase().includes('govern') ? 'govt' : 'private';
+  document.getElementById('chBadges').innerHTML =
+    `<span class="badge ${typeCls}">${d.type||''}</span>`+
+    (d.affiliation?`<span class="badge autonomous">${d.affiliation}</span>`:'')+
+    (d.naac_grade&&d.naac_grade!=='Not Accredited'?`<span class="badge naac">NAAC ${d.naac_grade}</span>`:'');
+
+  document.getElementById('chStats').innerHTML = `
+    <div class="ch-stat"><div class="ch-stat-num">${d.established||'—'}</div><div class="ch-stat-lbl">Established</div></div>
+    <div class="ch-stat"><div class="ch-stat-num">${d.total_seats||'—'}</div><div class="ch-stat-lbl">UG Seats</div></div>
+    <div class="ch-stat"><div class="ch-stat-num">${d.campus_area||'—'}</div><div class="ch-stat-lbl">Campus</div></div>
+    <div class="ch-stat"><div class="ch-stat-num">${d.naac_grade||'—'}</div><div class="ch-stat-lbl">NAAC</div></div>
+    <div class="ch-stat"><div class="ch-stat-num">${d.nirf_rank||'—'}</div><div class="ch-stat-lbl">NIRF Rank</div></div>`;
+
+  document.getElementById('overviewText').textContent = d.overview||'';
+  document.getElementById('infoGrid').innerHTML = [
+    ['Location',d.location],['Type',d.type],['Affiliation',d.affiliation],
+    ['Campus Area',d.campus_area],['Hostel',d.hostel?'✅ Available':'❌ Not Available'],
+    ['NAAC Grade',d.naac_grade],['NIRF Rank',d.nirf_rank],
+    ['Website',d.website?`<a href="${d.website}" target="_blank" style="color:var(--blue)">${d.website}</a>`:'—'],
+  ].map(([l,v])=>`<div class="info-row"><span class="info-label">${l}</span><span class="info-value">${v||'—'}</span></div>`).join('');
+
+  const facIcons={Library:'📚',Sports:'⚽',Gymnasium:'🏋️',Canteen:'🍽️','Wi-Fi':'📶',Lab:'🔬',Auditorium:'🎭',Hospital:'🏥',Transport:'🚌',Hostel:'🏠',Playground:'🏟️',Cafeteria:'☕'};
+  document.getElementById('facilitiesWrap').innerHTML = (d.facilities||[]).map(f=>{
+    const icon=Object.entries(facIcons).find(([k])=>f.includes(k))?.[1]||'✅';
+    return `<span class="facility-tag">${icon} ${f}</span>`;
+  }).join('')||'<span style="color:var(--muted);font-size:.85rem">No facility data available.</span>';
+
+  document.getElementById('prosCons').innerHTML = `
+    <div class="pros-box"><div class="pc-title">✅ Pros</div><ul class="pc-list">${(d.pros||[]).map(p=>`<li><div class="pc-dot">✓</div>${p}</li>`).join('')}</ul></div>
+    <div class="cons-box"><div class="pc-title">⚠️ Cons</div><ul class="pc-list">${(d.cons||[]).map(c=>`<li><div class="pc-dot">!</div>${c}</li>`).join('')}</ul></div>`;
+
+  document.getElementById('quickInfo').innerHTML = [
+    ['Type',d.type],['Affiliation',d.affiliation],['UG Seats',d.total_seats],
+    ['Campus',d.campus_area],['Hostel',d.hostel?'Available':'Not Available'],['Est.',d.established],
+  ].map(([l,v])=>`<div class="qi-row"><span class="qi-label">${l}</span><span class="qi-value">${v||'—'}</span></div>`).join('');
+
+  const ranks=d.rankings||{};
+  document.getElementById('rankingsContent').innerHTML=[
+    ['NIRF',ranks.nirf||d.nirf_rank||'—'],['Outlook',ranks.outlook||'—'],['The Week',ranks.week||'—'],
+  ].map(([s,v])=>`<div class="rank-row"><span class="rank-src">${s}</span><span class="rank-val">${v}</span></div>`).join('');
+
+  document.getElementById('nearbyList').innerHTML=(d.nearby_colleges||[]).map(c=>
+    `<div class="nearby-item" onclick="goto('${esc(c)}')">🏫 <span>${c}</span></div>`
+  ).join('')||'<div style="color:var(--muted);font-size:.83rem">No nearby colleges listed.</div>';
+}
+
+function tabTo(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const el2=document.getElementById(id);
+  if(el2) el2.scrollIntoView({behavior:'smooth',block:'start'});
+  return false;
+}
+</script>
+</body>
+</html>
