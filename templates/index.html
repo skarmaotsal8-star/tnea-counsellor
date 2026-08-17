@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>TNEA Counsellor — Tamil Nadu Engineering Admissions 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#f05a22;--orange-light:#ff7043;--orange-pale:#fff3ee;
+  --blue:#1a3c8f;--blue-light:#e8eeff;--blue-mid:#2e5fd4;
+  --green:#16a34a;--green-pale:#f0fdf4;
+  --text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;
+  --white:#ffffff;--bg:#f8f9fc;
+  --font:'Plus Jakarta Sans',sans-serif;--serif:'Fraunces',serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* ── NAV ── */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 5vw;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--orange-light));display:grid;place-items:center;font-size:1.1rem}
+.logo-text{font-weight:800;font-size:1.1rem;color:var(--text)}
+.logo-text span{color:var(--orange)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:8px;transition:all .2s}
+.nav-links a:hover{background:var(--orange-pale);color:var(--orange)}
+.nav-cta{background:var(--orange);color:#fff!important;border-radius:8px;padding:8px 18px!important;font-weight:600!important}
+.nav-cta:hover{background:var(--orange-light)!important;color:#fff!important}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:70px 5vw 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(240,90,34,.25) 0%,transparent 65%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-100px;left:10%;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(26,60,143,.4) 0%,transparent 65%);pointer-events:none}
+.hero-inner{max-width:780px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,90,34,.18);border:1px solid rgba(240,90,34,.35);color:#ffb199;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 16px;border-radius:99px;margin-bottom:26px;animation:fadeUp .5s ease both}
+.hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.6rem);font-weight:900;color:#fff;line-height:1.15;animation:fadeUp .55s .08s ease both}
+.hero h1 em{color:#ff8c5a;font-style:normal}
+.hero-sub{color:rgba(255,255,255,.65);font-size:1.05rem;line-height:1.75;margin:18px auto 0;max-width:560px;animation:fadeUp .55s .15s ease both}
+.search-wrapper{position:relative;margin:36px auto 0;max-width:580px;animation:fadeUp .55s .22s ease both}
+.hero-search{display:flex;background:#fff;border-radius:14px;overflow:visible;box-shadow:0 8px 40px rgba(0,0,0,.3);position:relative;z-index:10}
+.search-icon-wrap{display:grid;place-items:center;padding:0 16px;color:var(--muted);font-size:1.1rem;flex-shrink:0}
+.hero-search input{flex:1;border:none;outline:none;padding:16px 4px;font-family:var(--font);font-size:.98rem;color:var(--text);background:transparent;min-width:0}
+.hero-search input::placeholder{color:#aaa}
+.hero-search button{background:var(--orange);color:#fff;border:none;padding:0 28px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:var(--font);transition:background .2s;white-space:nowrap;border-radius:0 14px 14px 0;flex-shrink:0}
+.hero-search button:hover{background:var(--orange-light)}
+.autocomplete-list{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border-radius:12px;box-shadow:0 12px 48px rgba(0,0,0,.2);border:1px solid var(--border);overflow:hidden;z-index:999;display:none}
+.autocomplete-list.open{display:block}
+.ac-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid #f3f4f6;font-size:.88rem;color:var(--text)}
+.ac-item:last-child{border-bottom:none}
+.ac-item:hover,.ac-item.selected{background:var(--orange-pale)}
+.ac-icon{font-size:1rem;flex-shrink:0;width:28px;height:28px;background:var(--blue-light);border-radius:6px;display:grid;place-items:center}
+.ac-text{flex:1}
+.ac-text strong{display:block;font-weight:600;color:var(--text)}
+.ac-text span{font-size:.75rem;color:var(--muted)}
+.search-popular{margin-top:16px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;animation:fadeUp .55s .28s ease both}
+.pop-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:5px 14px;border-radius:99px;font-size:.75rem;font-weight:500;cursor:pointer;transition:all .2s}
+.pop-chip:hover{background:rgba(255,255,255,.22);color:#fff}
+.hero-stats{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;margin-top:44px;animation:fadeUp .55s .3s ease both}
+.h-stat{text-align:center}
+.h-stat-num{font-family:var(--serif);font-size:2rem;font-weight:900;color:#fff}
+.h-stat-lbl{font-size:.75rem;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.05em;text-transform:uppercase}
+
+/* ── SECTIONS ── */
+.section{padding:64px 5vw}
+.section-title{text-align:center;margin-bottom:48px}
+.section-title h2{font-family:var(--serif);font-size:2rem;font-weight:900}
+.section-title h2 span{color:var(--orange)}
+.section-title p{color:var(--muted);margin-top:10px;font-size:.95rem}
+
+/* ── FEATURE CARDS ── */
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
+@media(max-width:900px){.feature-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.feature-grid{grid-template-columns:1fr}}
+.feat-card{background:var(--white);border:2px solid var(--border);border-radius:20px;padding:32px 28px;text-decoration:none;color:var(--text);display:flex;flex-direction:column;align-items:flex-start;gap:16px;transition:all .25s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s}
+.feat-card.orange::before{background:linear-gradient(135deg,#fff3ee,#ffe0d0)}
+.feat-card.blue::before{background:linear-gradient(135deg,#e8eeff,#d0dcff)}
+.feat-card.green::before{background:linear-gradient(135deg,#f0fdf4,#dcfce7)}
+.feat-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.12);border-color:transparent}
+.feat-card.orange:hover{border-color:var(--orange)}
+.feat-card.blue:hover{border-color:var(--blue)}
+.feat-card.green:hover{border-color:var(--green)}
+.feat-card::before,.feat-card .feat-content{position:relative;z-index:1}
+.feat-card:hover::before{opacity:1}
+.feat-icon-wrap{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font-size:1.8rem;transition:transform .25s}
+.feat-card:hover .feat-icon-wrap{transform:scale(1.08)}
+.feat-card.orange .feat-icon-wrap{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.feat-card.blue   .feat-icon-wrap{background:linear-gradient(135deg,var(--blue),#2e5fd4)}
+.feat-card.green  .feat-icon-wrap{background:linear-gradient(135deg,var(--green),#22c55e)}
+.feat-card h3{font-size:1.15rem;font-weight:800;font-family:var(--serif)}
+.feat-card p{color:var(--muted);font-size:.85rem;line-height:1.65}
+.feat-cta{margin-top:auto;padding-top:14px;display:flex;align-items:center;gap:8px;font-weight:700;font-size:.88rem;transition:gap .2s}
+.feat-card.orange .feat-cta{color:var(--orange)}
+.feat-card.blue   .feat-cta{color:var(--blue)}
+.feat-card.green  .feat-cta{color:var(--green)}
+.feat-card:hover .feat-cta{gap:14px}
+
+/* ── CUTOFF CALCULATOR ── */
+.calc-section{padding:64px 5vw;background:var(--white)}
+.calc-card{max-width:700px;margin:0 auto;background:var(--bg);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.calc-header{background:linear-gradient(135deg,var(--blue),var(--blue-mid));padding:22px 28px}
+.calc-header h3{font-family:var(--serif);font-size:1.3rem;font-weight:900;color:#fff}
+.calc-header p{color:rgba(255,255,255,.65);font-size:.82rem;margin-top:4px}
+.calc-body{padding:28px;display:flex;flex-direction:column;gap:18px}
+.calc-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:600px){.calc-row{grid-template-columns:1fr}}
+.calc-field label{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+.calc-field input{width:100%;background:var(--white);border:1.5px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-family:var(--font);font-size:.92rem;outline:none;transition:border-color .2s}
+.calc-field input:focus{border-color:var(--blue)}
+.calc-result{background:var(--blue);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.cr-label{color:rgba(255,255,255,.7);font-size:.82rem}
+.cr-val{font-family:var(--serif);font-size:2rem;font-weight:900;color:#fff}
+.calc-note{font-size:.75rem;color:var(--muted);text-align:center;line-height:1.5}
+
+/* ── DOCUMENT CHECKLIST ── */
+.checklist-section{padding:64px 5vw;background:var(--bg)}
+.checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto}
+@media(max-width:700px){.checklist-grid{grid-template-columns:1fr}}
+.checklist-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px 22px}
+.cl-cat{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);margin-bottom:12px}
+.cl-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:.83rem;color:var(--text);cursor:pointer;transition:all .15s}
+.cl-item:last-child{border-bottom:none}
+.cl-item:hover{color:var(--blue)}
+.cl-check{width:18px;height:18px;border-radius:5px;border:2px solid var(--border);display:grid;place-items:center;flex-shrink:0;margin-top:1px;transition:all .2s;font-size:.6rem;color:#fff}
+.cl-item.done .cl-check{background:var(--green);border-color:var(--green)}
+.cl-item.done .cl-text{text-decoration:line-through;color:var(--muted)}
+.cl-text{line-height:1.4}
+.checklist-progress{max-width:900px;margin:20px auto 0;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px 22px;display:flex;align-items:center;gap:16px}
+.cp-bar-wrap{flex:1;background:var(--bg);border-radius:99px;height:8px;overflow:hidden}
+.cp-bar{height:100%;background:var(--green);border-radius:99px;transition:width .4s ease;width:0%}
+.cp-text{font-size:.82rem;font-weight:700;color:var(--text);white-space:nowrap}
+
+/* ── HOW IT WORKS ── */
+.how-section{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:64px 5vw}
+.how-section .section-title h2{color:#fff}
+.how-section .section-title p{color:rgba(255,255,255,.5)}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:900px;margin:0 auto}
+@media(max-width:700px){.steps-grid{grid-template-columns:1fr}}
+.step-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 24px;text-align:center}
+.step-num{width:44px;height:44px;border-radius:12px;background:var(--orange);color:#fff;font-weight:900;font-size:1.2rem;display:grid;place-items:center;margin:0 auto 16px}
+.step-card h4{color:#fff;font-weight:700;margin-bottom:8px}
+.step-card p{color:rgba(255,255,255,.5);font-size:.83rem;line-height:1.6}
+
+/* ── POPULAR BRANCHES ── */
+.branches-section{padding:48px 5vw;background:var(--bg)}
+.branches-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:900px;margin:0 auto}
+.branch-chip{background:var(--white);border:1px solid var(--border);padding:8px 18px;border-radius:99px;font-size:.82rem;font-weight:600;color:var(--text);cursor:pointer;transition:all .2s}
+.branch-chip:hover{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+
+/* ── FAQ ── */
+.faq-section{padding:64px 5vw;background:var(--white)}
+.faq-list{max-width:740px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.faq-item{background:var(--bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s}
+.faq-item.open{border-color:var(--orange)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;font-weight:700;font-size:.9rem;gap:12px}
+.faq-q:hover{color:var(--orange)}
+.faq-arrow{font-size:.75rem;color:var(--muted);transition:transform .25s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(180deg);color:var(--orange)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 20px;font-size:.85rem;color:var(--muted);line-height:1.75}
+.faq-item.open .faq-a{max-height:300px;padding:0 20px 16px}
+
+/* ═══════════════════════════════════════════════════
+   TNEA 2026 COUNSELLING SCHEDULE — LIVE STATUS TABLE
+═══════════════════════════════════════════════════ */
+.schedule-section{padding:64px 5vw;background:#fff}
+.schedule-section .section-title{margin-bottom:16px}
+
+/* Current stage banner */
+.current-stage-banner{
+  max-width:860px;margin:0 auto 36px;
+  background:linear-gradient(135deg,#fff7ed,#fff3e6);
+  border:2px solid var(--orange);
+  border-radius:16px;
+  padding:18px 24px;
+  display:flex;align-items:center;gap:16px;
+}
+.csb-pulse{
+  width:14px;height:14px;border-radius:50%;background:var(--orange);
+  flex-shrink:0;
+  box-shadow:0 0 0 0 rgba(240,90,34,.5);
+  animation:ripple 1.6s infinite;
+}
+@keyframes ripple{
+  0%  {box-shadow:0 0 0 0 rgba(240,90,34,.5)}
+  70% {box-shadow:0 0 0 12px rgba(240,90,34,0)}
+  100%{box-shadow:0 0 0 0 rgba(240,90,34,0)}
+}
+.csb-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin-bottom:2px}
+.csb-text{font-weight:800;font-size:1rem;color:var(--text)}
+.csb-date{margin-left:auto;font-size:.82rem;color:var(--muted);text-align:right;white-space:nowrap}
+.csb-date strong{display:block;color:var(--orange);font-size:.9rem}
+
+/* Schedule table */
+.schedule-wrap{max-width:860px;margin:0 auto;border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.sch-table{width:100%;border-collapse:collapse}
+.sch-table thead th{
+  background:linear-gradient(135deg,#1a1a2e,#16213e);
+  color:rgba(255,255,255,.8);
+  padding:13px 18px;text-align:left;
+  font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+}
+.sch-table tbody tr{border-top:1px solid var(--border);transition:background .15s}
+.sch-table tbody tr:hover{background:#fafafa}
+.sch-table tbody td{padding:14px 18px;vertical-align:middle;font-size:.87rem}
+
+/* row states */
+.sch-row-done td{opacity:.55}
+.sch-row-done .sch-event{text-decoration:line-through;color:var(--muted)}
+
+.sch-row-active{background:linear-gradient(90deg,#fff7ed,#fffbf8)!important}
+.sch-row-active td{border-left:4px solid var(--orange)}
+.sch-row-active td:first-child{border-left:4px solid var(--orange)}
+
+.sch-row-upcoming td{color:var(--muted)}
+
+/* cells */
+.sch-phase{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.phase-done      {background:#f3f4f6;color:#9ca3af}
+.phase-active    {background:#fff3ee;color:var(--orange)}
+.phase-upcoming  {background:var(--blue-light);color:var(--blue)}
+
+.sch-event{font-weight:700;font-size:.9rem;color:var(--text)}
+.sch-date{font-size:.82rem;color:var(--muted);margin-top:3px}
+.sch-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;font-size:.75rem;font-weight:700;white-space:nowrap}
+.badge-done    {background:#f0fdf4;color:var(--green);border:1px solid #bbf7d0}
+.badge-active  {background:#fff3ee;color:var(--orange);border:1px solid #fed7aa;animation:badgePulse 2s infinite}
+.badge-upcoming{background:var(--blue-light);color:var(--blue);border:1px solid #b8ccf5}
+.badge-tbd     {background:#f3f4f6;color:var(--muted);border:1px solid var(--border)}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(240,90,34,.25)}50%{box-shadow:0 0 0 5px rgba(240,90,34,0)}}
+
+.sch-active-arrow{font-size:1rem;animation:bounce .8s infinite alternate}
+@keyframes bounce{from{transform:translateX(0)}to{transform:translateX(4px)}}
+
+/* countdown under table */
+.countdown-strip{
+  max-width:860px;margin:20px auto 0;
+  background:linear-gradient(135deg,#1a1a2e,#16213e);
+  border-radius:14px;padding:18px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.cd-label{color:rgba(255,255,255,.55);font-size:.78rem}
+.cd-label strong{display:block;color:#fff;font-size:.9rem;margin-top:2px}
+.cd-blocks{display:flex;gap:10px}
+.cd-block{text-align:center;background:rgba(255,255,255,.08);border-radius:10px;padding:8px 14px;min-width:56px}
+.cd-num{font-family:var(--serif);font-size:1.4rem;font-weight:900;color:var(--orange)}
+.cd-unit{font-size:.6rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em}
+
+/* ── FOOTER ── */
+footer{background:#1a1a2e;color:rgba(255,255,255,.4);padding:32px 5vw;text-align:center;font-size:.8rem;line-height:1.8}
+footer strong{color:rgba(255,255,255,.7)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(24px);transition:all .55s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">🎓</div>
+    <div class="logo-text">TNEA<span>Counsellor</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/predictor">Predictor</a>
+    <a href="/chatbot">AI Chat</a>
+    <a href="https://www.tneaonline.org" target="_blank">Official TNEA ↗</a>
+    <a href="/predictor" class="nav-cta">Get Started →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">🎯 TNEA 2026 Counselling Guide</div>
+    <h1>Find Your <em>Dream</em> Engineering<br>College in Tamil Nadu</h1>
+    <p class="hero-sub">AI-powered cutoff predictions, smart college matching, detailed college profiles, and a 24/7 counsellor — everything you need.</p>
+    <div class="search-wrapper">
+      <div class="hero-search" id="searchBox">
+        <div class="search-icon-wrap">🔍</div>
+        <input type="text" id="heroSearch" placeholder="Search college name (e.g. PSG Tech, Anna University…)" autocomplete="off"/>
+        <button onclick="heroGo()">Search →</button>
+      </div>
+      <div class="autocomplete-list" id="acList"></div>
+    </div>
+    <div class="search-popular">
+      <span class="pop-chip" onclick="setSearch('PSG College of Technology')">PSG Tech</span>
+      <span class="pop-chip" onclick="setSearch('NIT Trichy')">NIT Trichy</span>
+      <span class="pop-chip" onclick="setSearch('SSN College of Engineering')">SSN</span>
+      <span class="pop-chip" onclick="setSearch('Coimbatore Institute of Technology')">CIT</span>
+      <span class="pop-chip" onclick="setSearch('Government College of Technology, Coimbatore')">GCT</span>
+      <span class="pop-chip" onclick="setSearch('Anna University, Chennai')">Anna University</span>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-num">600+</div><div class="h-stat-lbl">Colleges</div></div>
+      <div class="h-stat"><div class="h-stat-num">50+</div><div class="h-stat-lbl">Branches</div></div>
+      <div class="h-stat"><div class="h-stat-num">7</div><div class="h-stat-lbl">Communities</div></div>
+      <div class="h-stat"><div class="h-stat-num">3 Yrs</div><div class="h-stat-lbl">Historical Data</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE TOOLS -->
+<section class="section">
+  <div class="section-title reveal">
+    <h2>Three Powerful Tools, <span>One Platform</span></h2>
+    <p>Everything you need for a successful TNEA admission journey</p>
+  </div>
+  <div class="feature-grid">
+    <a href="/college-search" class="feat-card green reveal">
+      <div class="feat-icon-wrap">🏫</div>
+      <div class="feat-content">
+        <h3>College Explorer</h3>
+        <p>Detailed profiles of every Tamil Nadu engineering college — overview, rankings, facilities, pros &amp; cons, and nearby colleges.</p>
+      </div>
+      <div class="feat-cta">Explore Colleges <span>→</span></div>
+    </a>
+    <a href="/predictor" class="feat-card orange reveal">
+      <div class="feat-icon-wrap">🎯</div>
+      <div class="feat-content">
+        <h3>College Predictor</h3>
+        <p>Enter your TNEA cutoff, community, and city preference to instantly get personalised recommendations in Dream, Ambitious &amp; Safe tiers.</p>
+      </div>
+      <div class="feat-cta">Try Predictor <span>→</span></div>
+    </a>
+    <a href="/chatbot" class="feat-card blue reveal">
+      <div class="feat-icon-wrap">💬</div>
+      <div class="feat-content">
+        <h3>AI Counsellor Chat</h3>
+        <p>Ask anything about TNEA — documents, branch comparisons, fee queries — via text. Available 24/7 with instant answers.</p>
+      </div>
+      <div class="feat-cta">Chat Now <span>→</span></div>
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     TNEA 2026 COUNSELLING SCHEDULE (LIVE STATUS)
+══════════════════════════════════════════════ -->
+<section class="schedule-section">
+  <div class="section-title reveal">
+    <h2>TNEA 2026 <span>Counselling Schedule</span></h2>
+    <p>Official dates with live status — see exactly which phase is happening now</p>
+  </div>
+
+  <!-- Current phase banner — filled by JS -->
+  <div class="current-stage-banner reveal" id="currentBanner">
+    <div class="csb-pulse"></div>
+    <div>
+      <div class="csb-label">Currently Active Phase</div>
+      <div class="csb-text" id="bannerText">Loading…</div>
+    </div>
+    <div class="csb-date" id="bannerDate"></div>
+  </div>
+
+  <div class="schedule-wrap reveal">
+    <table class="sch-table">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Event</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="scheduleBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Countdown to next milestone -->
+  <div class="countdown-strip reveal" id="countdownStrip">
+    <div class="cd-label"><strong id="cdTitle">Next: Registration Deadline</strong>Countdown</div>
+    <div class="cd-blocks">
+      <div class="cd-block"><div class="cd-num" id="cdDays">--</div><div class="cd-unit">Days</div></div>
+      <div class="cd-block"><div class="cd-num" id="cdHours">--</div><div class="cd-unit">Hrs</div></div>
+      <div class="cd-block"><div class="cd-num" id="cdMins">--</div><div class="cd-unit">Min</div></div>
+      <div class="cd-block"><div class="cd-num" id="cdSecs">--</div><div class="cd-unit">Sec</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CUTOFF CALCULATOR -->
+<section class="calc-section">
+  <div class="section-title reveal">
+    <h2>TNEA Cutoff <span>Calculator</span></h2>
+    <p>Instantly compute your TNEA cutoff from your Class 12 marks</p>
+  </div>
+  <div class="calc-card reveal">
+    <div class="calc-header">
+      <h3>📐 Calculate Your Cutoff</h3>
+      <p>Enter your Class 12 subject marks (out of 100) to find your TNEA cutoff score (out of 200)</p>
+    </div>
+    <div class="calc-body">
+      <div class="calc-row">
+        <div class="calc-field">
+          <label>Mathematics</label>
+          <input type="number" id="mathMark" min="0" max="100" placeholder="e.g. 95" oninput="calcCutoff()"/>
+        </div>
+        <div class="calc-field">
+          <label>Physics</label>
+          <input type="number" id="physMark" min="0" max="100" placeholder="e.g. 90" oninput="calcCutoff()"/>
+        </div>
+        <div class="calc-field">
+          <label>Chemistry</label>
+          <input type="number" id="chemMark" min="0" max="100" placeholder="e.g. 88" oninput="calcCutoff()"/>
+        </div>
+      </div>
+      <div class="calc-result">
+        <div>
+          <div class="cr-label">Your TNEA Cutoff Score</div>
+          <div class="cr-val" id="cutoffResult">— / 200</div>
+        </div>
+        <a href="/predictor" id="calcPredict" style="display:none;background:var(--orange);color:#fff;text-decoration:none;padding:10px 20px;border-radius:10px;font-weight:700;font-size:.88rem;white-space:nowrap">Predict Colleges →</a>
+      </div>
+      <p class="calc-note">Formula: Cutoff = (Maths × 1) + (Physics × 0.5) + (Chemistry × 0.5)<br>Scores out of 100 each. Result is out of 200.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DOCUMENT CHECKLIST -->
+<section class="checklist-section">
+  <div class="section-title reveal">
+    <h2>TNEA Document <span>Checklist</span></h2>
+    <p>Track the documents you need for counselling — click to mark as done</p>
+  </div>
+  <div class="checklist-progress reveal">
+    <div class="cp-bar-wrap"><div class="cp-bar" id="cpBar"></div></div>
+    <div class="cp-text" id="cpText">0 / 0 documents ready</div>
+  </div>
+  <div class="checklist-grid reveal">
+    <div class="checklist-card">
+      <div class="cl-cat">🎓 Academic Documents</div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Class 10 Mark Sheet (Original + 2 copies)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Class 12 Mark Sheet (Original + 2 copies)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Class 12 Transfer Certificate (TC)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Conduct Certificate from School</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Migration Certificate (if applicable)</div></div>
+    </div>
+    <div class="checklist-card">
+      <div class="cl-cat">🪪 Identity & Community</div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Aadhaar Card (Original + copy)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Community Certificate (issued by Tahsildar)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Nativity / Residence Certificate</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">First Graduate Certificate (if applicable)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Ex-Servicemen / Special category proof (if any)</div></div>
+    </div>
+    <div class="checklist-card">
+      <div class="cl-cat">📸 Photos & Applications</div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Passport-size photographs (10 copies)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">TNEA Application printout</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Rank / Allotment letter from TNEA portal</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Fee payment receipts</div></div>
+    </div>
+    <div class="checklist-card">
+      <div class="cl-cat">💰 Financial Documents</div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Income Certificate (for scholarship/fee waiver)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Parent/Guardian income proof</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Bank passbook (for scholarship disbursement)</div></div>
+      <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">DD / challan for counselling fees (if required)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="section-title">
+    <h2>How It Works</h2>
+    <p>Get your perfect college list in 3 simple steps</p>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card reveal"><div class="step-num">1</div><h4>Calculate Your Cutoff</h4><p>Use our built-in calculator to find your exact TNEA cutoff score from your Class 12 marks.</p></div>
+    <div class="step-card reveal"><div class="step-num">2</div><h4>Predict & Filter Colleges</h4><p>Enter your cutoff, community, preferred branches — get Dream, Ambitious &amp; Safe tiers instantly.</p></div>
+    <div class="step-card reveal"><div class="step-num">3</div><h4>Explore &amp; Decide</h4><p>View detailed college profiles, track your document checklist, and chat with our AI counsellor.</p></div>
+  </div>
+</section>
+
+<!-- POPULAR BRANCHES -->
+<section class="branches-section">
+  <div class="section-title reveal">
+    <h2>Popular <span>Engineering Branches</span></h2>
+    <p>Search colleges by your preferred discipline</p>
+  </div>
+  <div class="branches-grid reveal">
+    <span class="branch-chip" onclick="setSearch('PSG College of Technology')">Computer Science &amp; Engg</span>
+    <span class="branch-chip" onclick="setSearch('SSN College of Engineering')">Electronics &amp; Communication</span>
+    <span class="branch-chip" onclick="setSearch('Government College of Technology')">Mechanical Engineering</span>
+    <span class="branch-chip" onclick="setSearch('NIT Trichy')">Civil Engineering</span>
+    <span class="branch-chip" onclick="setSearch('Coimbatore Institute of Technology')">Electrical &amp; Electronics</span>
+    <span class="branch-chip" onclick="setSearch('Thiagarajar College of Engineering')">Information Technology</span>
+    <span class="branch-chip" onclick="setSearch('Kongu Engineering College')">Chemical Engineering</span>
+    <span class="branch-chip" onclick="setSearch('Amrita School of Engineering')">Biotechnology</span>
+    <span class="branch-chip" onclick="setSearch('Kumaraguru College of Technology')">AI &amp; Data Science</span>
+    <span class="branch-chip" onclick="setSearch('Karpagam College of Engineering')">Cyber Security</span>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="section-title reveal">
+    <h2>Frequently Asked <span>Questions</span></h2>
+    <p>Quick answers to the most common TNEA doubts</p>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How is the TNEA cutoff calculated? <span class="faq-arrow">▼</span></div><div class="faq-a">TNEA cutoff = Maths (×1) + Physics (×0.5) + Chemistry (×0.5). Maximum is 200. Biology students use Biology instead of Maths.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the difference between Dream, Ambitious, and Safe colleges? <span class="faq-arrow">▼</span></div><div class="faq-a">Dream — predicted cutoff is above your score (stretch goal). Ambitious — within ±5 marks (realistic). Safe — your score is comfortably above predicted cutoff (high probability). These are planning guides, not guarantees.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is the prediction 100% accurate? <span class="faq-arrow">▼</span></div><div class="faq-a">No. Predictions are based on historical TNEA cutoff data and an ML model. Actual cutoffs change every year. Always verify with the official TNEA portal.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I change my branch after allotment? <span class="faq-arrow">▼</span></div><div class="faq-a">Yes, during supplementary rounds if seats are available. Internal branch upgrades can be requested in some colleges after joining.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How many choices can I fill during TNEA counselling? <span class="faq-arrow">▼</span></div><div class="faq-a">There is no fixed limit. You can fill as many college-branch combinations as you wish. Advisable to fill at least 15–20 choices covering all three tiers.</div></div>
+  </div>
+</section>
+
+<footer>
+  <strong>TNEA Counsellor</strong> · Built for Tamil Nadu Engineering Aspirants<br>
+  Predictions based on historical Anna University data · Not officially affiliated with TNEA or Anna University
+</footer>
+
+<script>
+/* ══════════════════════════════════════════
+   TNEA 2026 SCHEDULE DATA (from official dates)
+══════════════════════════════════════════ */
+const SCHEDULE = [
+  { phase:'Phase 1', event:'Registration & Application', date:'2026-06-02', dateLabel:'June 2, 2026',     icon:'📋' },
+  { phase:'Phase 2', event:'Random Number Assignment',   date:'2026-06-05', dateLabel:'June 5, 2026',     icon:'🔢' },
+  { phase:'Phase 3', event:'Last Date to Upload Documents', date:'2026-06-06', dateLabel:'June 6, 2026',  icon:'📁' },
+  { phase:'Phase 4', event:'Certificate Verification (at TFCs)', date:'2026-06-20', dateLabel:'June 8 – 20, 2026', icon:'✅', startDate:'2026-06-08' },
+  { phase:'Phase 5', event:'Declaration of Rank List',   date:'2026-06-29', dateLabel:'June 29, 2026',    icon:'📊' },
+  { phase:'Phase 6', event:'General Counselling (Rounds 1 to 3)', date:'2026-08-31', dateLabel:'July – August 2026', icon:'🏫', startDate:'2026-07-01' },
+];
+
+const TODAY = new Date();
+TODAY.setHours(0,0,0,0);
+
+function parseDate(d){ return new Date(d+'T00:00:00'); }
+
+function getRowState(item){
+  const end   = parseDate(item.date);
+  const start = item.startDate ? parseDate(item.startDate) : end;
+  if(TODAY > end)   return 'done';
+  if(TODAY >= start && TODAY <= end) return 'active';
+  return 'upcoming';
+}
+
+function buildSchedule(){
+  const tbody = document.getElementById('scheduleBody');
+  let activeItem = null;
+  let nextItem   = null;
+
+  SCHEDULE.forEach(item=>{
+    const state = getRowState(item);
+    if(state==='active' && !activeItem) activeItem = item;
+    if(state==='upcoming' && !nextItem) nextItem = item;
+
+    const phaseClass = state==='done' ? 'phase-done' : state==='active' ? 'phase-active' : 'phase-upcoming';
+    const badgeClass = state==='done' ? 'badge-done' : state==='active' ? 'badge-active' : 'badge-upcoming';
+    const badgeText  = state==='done' ? '✓ Completed' : state==='active' ? '● In Progress' : '○ Upcoming';
+    const rowClass   = state==='done' ? 'sch-row-done' : state==='active' ? 'sch-row-active' : 'sch-row-upcoming';
+    const arrow      = state==='active' ? '<span class="sch-active-arrow">▶</span>' : '';
+
+    tbody.innerHTML += `
+      <tr class="${rowClass}">
+        <td><span class="sch-phase ${phaseClass}">${item.phase}</span></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            ${arrow}
+            <div>
+              <div class="sch-event">${item.icon} ${item.event}</div>
+            </div>
+          </div>
+        </td>
+        <td><div class="sch-date">${item.dateLabel}</div></td>
+        <td><span class="sch-badge ${badgeClass}">${badgeText}</span></td>
+      </tr>`;
+  });
+
+  // Banner
+  const banner = document.getElementById('currentBanner');
+  const bannerText = document.getElementById('bannerText');
+  const bannerDate = document.getElementById('bannerDate');
+
+  if(activeItem){
+    bannerText.textContent = activeItem.icon + ' ' + activeItem.event;
+    bannerDate.innerHTML = `<span style="color:var(--muted);font-size:.72rem">Deadline</span><strong>${activeItem.dateLabel}</strong>`;
+  } else if(nextItem){
+    banner.style.background = 'linear-gradient(135deg,#e8eeff,#f0f4ff)';
+    banner.style.border = '2px solid var(--blue)';
+    banner.querySelector('.csb-pulse').style.background = 'var(--blue)';
+    banner.querySelector('.csb-label').style.color = 'var(--blue)';
+    banner.querySelector('.csb-label').textContent = 'Next Upcoming Phase';
+    bannerText.textContent = nextItem.icon + ' ' + nextItem.event;
+    bannerDate.innerHTML = `<span style="color:var(--muted);font-size:.72rem">Starts</span><strong style="color:var(--blue)">${nextItem.dateLabel}</strong>`;
+  } else {
+    bannerText.textContent = '🎉 All counselling phases are complete for 2026!';
+    bannerDate.innerHTML = '';
+  }
+
+  // Countdown to next upcoming milestone
+  const target = nextItem || activeItem;
+  if(target){
+    document.getElementById('cdTitle').textContent = 'Next: ' + target.event;
+    runCountdown(target.date);
+  } else {
+    document.getElementById('countdownStrip').style.display = 'none';
+  }
+}
+
+function runCountdown(dateStr){
+  function tick(){
+    const now  = new Date();
+    const end  = new Date(dateStr+'T23:59:59');
+    const diff = end - now;
+    if(diff <= 0){
+      document.getElementById('cdDays').textContent  = '0';
+      document.getElementById('cdHours').textContent = '0';
+      document.getElementById('cdMins').textContent  = '0';
+      document.getElementById('cdSecs').textContent  = '0';
+      return;
+    }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const s = Math.floor((diff%60000)/1000);
+    document.getElementById('cdDays').textContent  = d;
+    document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cdMins').textContent  = String(m).padStart(2,'0');
+    document.getElementById('cdSecs').textContent  = String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick,1000);
+}
+
+buildSchedule();
+
+/* ── Search autocomplete ── */
+let acItems=[],acIndex=-1,debounceTimer;
+const input=document.getElementById('heroSearch');
+const acList=document.getElementById('acList');
+input.addEventListener('input',()=>{clearTimeout(debounceTimer);debounceTimer=setTimeout(fetchSuggestions,250)});
+input.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){e.preventDefault();moveAc(1)}
+  else if(e.key==='ArrowUp'){e.preventDefault();moveAc(-1)}
+  else if(e.key==='Enter'){if(acIndex>=0&&acItems[acIndex])selectAc(acItems[acIndex]);else heroGo()}
+  else if(e.key==='Escape')closeAc()
+});
+document.addEventListener('click',e=>{if(!document.getElementById('searchBox').contains(e.target))closeAc()});
+async function fetchSuggestions(){
+  const q=input.value.trim();if(q.length<2){closeAc();return}
+  try{const res=await fetch(`/api/college-suggestions?q=${encodeURIComponent(q)}`);const data=await res.json();showAc(data.suggestions||[])}catch(e){closeAc()}
+}
+function showAc(items){
+  acItems=items;acIndex=-1;if(!items.length){closeAc();return}
+  acList.innerHTML=items.map((c,i)=>`<div class="ac-item" onmousedown="selectAc('${c.replace(/'/g,"\\'")}')"><div class="ac-icon">🏫</div><div class="ac-text"><strong>${c}</strong><span>Tamil Nadu Engineering College</span></div><span>→</span></div>`).join('');
+  acList.classList.add('open')
+}
+function moveAc(dir){
+  const els=acList.querySelectorAll('.ac-item');els.forEach(el=>el.classList.remove('selected'));
+  acIndex=Math.max(-1,Math.min(acItems.length-1,acIndex+dir));
+  if(acIndex>=0){els[acIndex].classList.add('selected');input.value=acItems[acIndex]}
+}
+function selectAc(name){input.value=name;closeAc();gotoCollege(name)}
+function closeAc(){acList.classList.remove('open');acList.innerHTML='';acItems=[];acIndex=-1}
+function setSearch(t){input.value=t;input.focus();gotoCollege(t)}
+function heroGo(){const q=input.value.trim();if(q)window.location.href='/college-search?q='+encodeURIComponent(q)}
+function gotoCollege(n){window.location.href='/college-search?q='+encodeURIComponent(n)}
+
+/* ── Cutoff Calculator ── */
+function calcCutoff(){
+  const m=parseFloat(document.getElementById('mathMark').value)||0;
+  const p=parseFloat(document.getElementById('physMark').value)||0;
+  const c=parseFloat(document.getElementById('chemMark').value)||0;
+  if(m===0&&p===0&&c===0){document.getElementById('cutoffResult').textContent='— / 200';document.getElementById('calcPredict').style.display='none';return}
+  const cutoff=(m*1)+(p*0.5)+(c*0.5);
+  document.getElementById('cutoffResult').textContent=cutoff.toFixed(2)+' / 200';
+  const btn=document.getElementById('calcPredict');
+  btn.href='/predictor?cutoff='+cutoff.toFixed(2);
+  btn.style.display='inline-block'
+}
+
+/* ── Document Checklist ── */
+function toggleCheck(item){
+  item.classList.toggle('done');
+  item.querySelector('.cl-check').textContent=item.classList.contains('done')?'✓':'';
+  updateProgress()
+}
+function updateProgress(){
+  const all=document.querySelectorAll('.cl-item');
+  const done=document.querySelectorAll('.cl-item.done');
+  const pct=all.length?Math.round(done.length/all.length*100):0;
+  document.getElementById('cpBar').style.width=pct+'%';
+  document.getElementById('cpText').textContent=`${done.length} / ${all.length} documents ready`
+}
+updateProgress();
+
+/* ── FAQ ── */
+function toggleFaq(el){
+  const item=el.parentElement;
+  document.querySelectorAll('.faq-item.open').forEach(i=>{if(i!==item)i.classList.remove('open')});
+  item.classList.toggle('open')
+}
+
+/* ── Scroll reveal ── */
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
+</script>
+</body>
+</html>
