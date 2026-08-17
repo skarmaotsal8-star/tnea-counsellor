@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>College Predictor — TNEA Counsellor 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#f05a22;--orange-light:#ff7043;--orange-pale:#fff3ee;
+  --blue:#1a3c8f;--blue-light:#e8eeff;--blue-mid:#2e5fd4;
+  --green:#16a34a;--green-pale:#f0fdf4;
+  --text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;
+  --white:#ffffff;--bg:#f8f9fc;
+  --dream:#e11d48;--dream-bg:#fff1f3;
+  --ambitious:#f05a22;--ambitious-bg:#fff3ee;
+  --safe:#16a34a;--safe-bg:#f0fdf4;
+  --font:'Plus Jakarta Sans',sans-serif;--serif:'Fraunces',serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text)}
+
+/* ── TERMS POPUP OVERLAY ── */
+.terms-overlay{position:fixed;inset:0;background:rgba(10,10,30,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.terms-box{background:var(--white);border-radius:20px;max-width:640px;width:100%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+.terms-header{background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:24px 28px;flex-shrink:0}
+.terms-header h2{font-family:var(--serif);font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:6px}
+.terms-header p{font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.5}
+.terms-body{padding:24px 28px;overflow-y:auto;flex:1}
+.term-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #f3f4f6;align-items:flex-start}
+.term-item:last-child{border-bottom:none}
+.term-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:1rem;flex-shrink:0}
+.term-icon.warn{background:#fff1f3}
+.term-icon.info{background:var(--blue-light)}
+.term-icon.ok  {background:var(--green-pale)}
+.term-icon.note{background:var(--orange-pale)}
+.term-content h4{font-weight:800;font-size:.88rem;margin-bottom:3px;color:var(--text)}
+.term-content p{font-size:.8rem;color:var(--muted);line-height:1.6}
+.terms-footer{padding:20px 28px;border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.terms-agree-wrap{display:flex;align-items:center;gap:8px;flex:1;min-width:200px}
+.terms-agree-wrap input{accent-color:var(--orange);width:16px;height:16px;cursor:pointer}
+.terms-agree-wrap label{font-size:.83rem;color:var(--text);cursor:pointer;line-height:1.4}
+.btn-agree{background:var(--orange);color:#fff;border:none;border-radius:10px;padding:11px 28px;font-family:var(--font);font-size:.9rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
+.btn-agree:hover{opacity:.88}
+.btn-agree:disabled{opacity:.4;cursor:default}
+
+/* NAV */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 5vw;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--orange-light));display:grid;place-items:center;font-size:1.1rem}
+.logo-text{font-weight:800;font-size:1.1rem;color:var(--text)}
+.logo-text span{color:var(--orange)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:8px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{background:var(--orange-pale);color:var(--orange)}
+
+/* PAGE HEADER */
+.page-header{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:36px 5vw 40px}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:12px}
+.breadcrumb a{color:rgba(255,255,255,.45);text-decoration:none}
+.breadcrumb a:hover{color:rgba(255,255,255,.8)}
+.page-header h1{font-family:var(--serif);font-size:2rem;font-weight:900;color:#fff}
+.page-header p{color:rgba(255,255,255,.55);margin-top:6px;font-size:.9rem}
+
+/* TOP FILTER BAR */
+.filter-bar{background:var(--white);border-bottom:1px solid var(--border);padding:16px 5vw;position:sticky;top:64px;z-index:90;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.filter-inner{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;max-width:1200px;margin:0 auto}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.fg input[type=number],.fg select{background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:9px 12px;border-radius:10px;font-family:var(--font);font-size:.88rem;outline:none;transition:border-color .2s;height:40px}
+.fg input[type=number]:focus,.fg select:focus{border-color:var(--orange);background:#fff}
+.fg input[type=number]{width:140px}
+.fg select{min-width:120px}
+
+/* branch multi-select */
+.fg.branch-fg{flex:1;min-width:180px;max-width:340px}
+.branch-select-wrap{position:relative}
+.branch-display{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:0 34px 0 12px;font-size:.88rem;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-height:40px;transition:border-color .2s;position:relative;user-select:none;overflow:hidden}
+.branch-display.open,.branch-display:focus-within{border-color:var(--orange);background:#fff}
+.branch-display::after{content:'▾';position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.75rem;pointer-events:none}
+.bd-tag{background:var(--orange-pale);color:var(--orange);border:1px solid rgba(240,90,34,.3);padding:2px 8px;border-radius:99px;font-size:.7rem;font-weight:700;white-space:nowrap;flex-shrink:0}
+.bd-placeholder{color:#aaa;font-size:.85rem}
+.branch-dropdown{position:absolute;top:calc(100%+4px);left:0;right:0;z-index:200;background:#fff;border:1.5px solid var(--border);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.12);max-height:240px;overflow-y:auto;display:none}
+.branch-dropdown.open{display:block}
+.bd-search{padding:8px 12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:#fff}
+.bd-search input{width:100%;border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-family:var(--font);font-size:.82rem;outline:none}
+.bd-option{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;font-size:.82rem;transition:background .15s}
+.bd-option:hover{background:var(--orange-pale)}
+.bd-option input{accent-color:var(--orange);width:14px;height:14px;flex-shrink:0}
+.bd-option.checked{background:#fff8f5;color:var(--orange);font-weight:600}
+
+/* location filter */
+.fg.loc-fg{min-width:150px}
+
+.info-pill{background:var(--blue-light);border:1px solid #b8ccf5;border-radius:10px;padding:8px 12px;font-size:.73rem;color:var(--blue);line-height:1.5;flex-shrink:0;max-width:180px}
+.info-pill strong{display:block;font-size:.68rem;font-weight:800;margin-bottom:2px;text-transform:uppercase;letter-spacing:.06em}
+.btn-predict{background:linear-gradient(135deg,var(--orange),var(--orange-light));color:#fff;border:none;border-radius:10px;font-family:var(--font);font-size:.95rem;font-weight:800;padding:0 26px;cursor:pointer;transition:opacity .2s,transform .15s;white-space:nowrap;height:40px;display:flex;align-items:center;gap:6px;flex-shrink:0;align-self:flex-end}
+.btn-predict:hover{opacity:.9;transform:translateY(-1px)}
+.btn-predict:active{transform:translateY(0)}
+.btn-predict:disabled{opacity:.5;cursor:default;transform:none}
+.ml-warn{background:#fff1f3;border:1px solid #fecdd3;border-radius:10px;padding:10px 14px;font-size:.78rem;color:#e11d48;line-height:1.6;width:100%}
+
+/* RESULTS */
+.results-wrap{padding:28px 5vw 64px;max-width:1200px;margin:0 auto}
+.results-empty{background:var(--white);border:2px dashed var(--border);border-radius:16px;padding:70px 30px;text-align:center;color:var(--muted)}
+.empty-icon{font-size:3.5rem;margin-bottom:16px}
+.results-empty h3{font-family:var(--serif);font-size:1.3rem;color:var(--text);margin-bottom:8px}
+.results-empty p{font-size:.88rem;line-height:1.6}
+.summary-bar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px}
+.sum-card{border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px}
+.sum-card.dream    {background:var(--dream-bg);    border:1px solid #fecdd3}
+.sum-card.ambitious{background:var(--ambitious-bg);border:1px solid #fed7aa}
+.sum-card.safe     {background:var(--safe-bg);     border:1px solid #bbf7d0}
+.sum-icon{font-size:1.8rem}
+.sum-num{font-family:var(--serif);font-size:1.8rem;font-weight:900}
+.sum-card.dream     .sum-num{color:var(--dream)}
+.sum-card.ambitious .sum-num{color:var(--ambitious)}
+.sum-card.safe      .sum-num{color:var(--safe)}
+.sum-lbl{font-size:.75rem;color:var(--muted);margin-top:2px}
+.cat-section{margin-bottom:28px}
+.cat-header{display:flex;align-items:center;gap:10px;padding:14px 18px;border-radius:12px 12px 0 0;border:1px solid transparent}
+.cat-header.dream    {background:var(--dream-bg);    border-color:#fecdd3}
+.cat-header.ambitious{background:var(--ambitious-bg);border-color:#fed7aa}
+.cat-header.safe     {background:var(--safe-bg);     border-color:#bbf7d0}
+.cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cat-header.dream     .cat-dot{background:var(--dream)}
+.cat-header.ambitious .cat-dot{background:var(--ambitious)}
+.cat-header.safe      .cat-dot{background:var(--safe)}
+.cat-title-text{font-weight:800;font-size:.95rem}
+.cat-header.dream     .cat-title-text{color:var(--dream)}
+.cat-header.ambitious .cat-title-text{color:var(--ambitious)}
+.cat-header.safe      .cat-title-text{color:var(--safe)}
+.cat-desc{font-size:.75rem;color:var(--muted);margin-left:4px;margin-right:auto}
+.cat-count{font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:99px}
+.cat-header.dream     .cat-count{background:#fecdd3;color:var(--dream)}
+.cat-header.ambitious .cat-count{background:#fed7aa;color:var(--ambitious)}
+.cat-header.safe      .cat-count{background:#bbf7d0;color:var(--safe)}
+.table-wrap{border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead th{background:var(--bg);padding:10px 14px;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border)}
+tbody tr{border-top:1px solid #f3f4f6;transition:background .15s}
+tbody tr:hover{background:#fafafa}
+tbody td{padding:11px 14px;vertical-align:middle}
+.college-name{font-weight:700;font-size:.85rem;color:var(--text)}
+.branch-name{font-size:.75rem;color:var(--muted);margin-top:2px}
+.cutoff-badge{font-weight:800;font-size:.88rem;padding:4px 12px;border-radius:99px}
+.cutoff-badge.dream    {background:var(--dream-bg);    color:var(--dream)}
+.cutoff-badge.ambitious{background:var(--ambitious-bg);color:var(--ambitious)}
+.cutoff-badge.safe     {background:var(--safe-bg);     color:var(--safe)}
+.empty-cat{padding:22px;text-align:center;color:var(--muted);font-size:.83rem;background:var(--white)}
+.more-note{text-align:center;font-size:.75rem;color:var(--muted);padding:10px;background:var(--bg);border-top:1px solid var(--border)}
+.loading-state{display:none;background:var(--white);border:1px solid var(--border);border-radius:16px;padding:60px;text-align:center}
+.spinner{width:44px;height:44px;border-radius:50%;border:4px solid var(--border);border-top-color:var(--orange);animation:spin .7s linear infinite;margin:0 auto 18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+footer{background:#1a1a2e;color:rgba(255,255,255,.4);padding:28px 5vw;text-align:center;font-size:.8rem;line-height:1.8}
+footer strong{color:rgba(255,255,255,.7)}
+</style>
+</head>
+<body>
+
+<!-- ══ TERMS & CONDITIONS POPUP ══ -->
+<div class="terms-overlay" id="termsOverlay">
+  <div class="terms-box">
+    <div class="terms-header">
+      <h2>📋 Before You Begin — Important Notice</h2>
+      <p>Please read these terms carefully. They explain how our predictions work and their limitations.</p>
+    </div>
+    <div class="terms-body">
+
+      <div class="term-item">
+        <div class="term-icon warn">⚠️</div>
+        <div class="term-content">
+          <h4>Predictions Are Not Guarantees</h4>
+          <p>Our ML model predicts cutoffs based on <strong>historical TNEA data (past 3 years)</strong>. Actual cutoffs change every year depending on the number of applicants, seat availability, and reservation quotas. A college listed as "Safe" does NOT guarantee admission.</p>
+        </div>
+      </div>
+
+      <div class="term-item">
+        <div class="term-icon warn">📉</div>
+        <div class="term-content">
+          <h4>Safe ≠ Confirmed; Dream ≠ Impossible</h4>
+          <p>"Safe" means your score is historically above the predicted cutoff — but cutoffs can rise. "Dream" means you're below the typical cutoff — but if fewer students apply, it can fall. Treat all categories as <strong>planning guides, not definitive answers</strong>.</p>
+        </div>
+      </div>
+
+      <div class="term-item">
+        <div class="term-icon info">📊</div>
+        <div class="term-content">
+          <h4>Based on Previous Years' Records</h4>
+          <p>All cutoff data is sourced from <strong>Anna University official TNEA records</strong> from previous counselling cycles. Seat matrix changes, new reservations, or policy updates from this year may not be reflected in our model.</p>
+        </div>
+      </div>
+
+      <div class="term-item">
+        <div class="term-icon note">🔢</div>
+        <div class="term-content">
+          <h4>Community Cutoffs Vary Significantly</h4>
+          <p>Cutoffs differ widely between OC, BC, MBC, SC, SCA and ST categories. Always select your <strong>exact community</strong> for accurate predictions. Using the wrong community will produce incorrect results.</p>
+        </div>
+      </div>
+
+      <div class="term-item">
+        <div class="term-icon note">📍</div>
+        <div class="term-content">
+          <h4>Location Filter Uses College Name</h4>
+          <p>Our dataset does not have a separate city column. The location filter searches city names <strong>embedded within college names</strong> (e.g., "Coimbatore" in "PSG College of Technology, Coimbatore"). Results may not cover all colleges in a city if the city name is not in the college's official name.</p>
+        </div>
+      </div>
+
+      <div class="term-item">
+        <div class="term-icon ok">✅</div>
+        <div class="term-content">
+          <h4>Always Verify with Official TNEA Portal</h4>
+          <p>This tool is for <strong>planning and guidance only</strong>. Before finalising your choice list, always cross-check cutoffs, seat availability, and allotment status at <strong>tneaonline.org</strong> — the only official source.</p>
+        </div>
+      </div>
+
+      <div class="term-item">
+        <div class="term-icon ok">🤖</div>
+        <div class="term-content">
+          <h4>College Explorer Uses AI-Generated Data</h4>
+          <p>College profiles in the Explorer section are <strong>generated by an AI model (GPT-4o-mini)</strong> based on its training data — not fetched from a live database. Placement figures, rankings, and other details are AI-estimated and may not be 100% accurate.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="terms-footer">
+      <div class="terms-agree-wrap">
+        <input type="checkbox" id="termsCheck" onchange="document.getElementById('agreeBtn').disabled=!this.checked"/>
+        <label for="termsCheck">I understand these predictions are based on historical data and are not guaranteed outcomes. I will verify important decisions with the official TNEA portal.</label>
+      </div>
+      <button class="btn-agree" id="agreeBtn" disabled onclick="acceptTerms()">I Agree &amp; Continue →</button>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">🎓</div>
+    <div class="logo-text">TNEA<span>Counsellor</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/predictor" class="active">Predictor</a>
+    <a href="/chatbot">AI Chat</a>
+    <a href="https://www.tneaonline.org" target="_blank">Official TNEA ↗</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">Home</a><span>/</span><span>College Predictor</span></div>
+  <h1>🎯 TNEA 2026 College Predictor</h1>
+  <p>Enter your details below to get ML-powered college recommendations — Dream, Ambitious &amp; Safe</p>
+</div>
+
+<!-- TOP FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+
+    {% if not ml_available %}
+    <div class="ml-warn">⚠️ Dataset not found. Place <code>tnea*.csv</code> files in the <code>dataset/</code> folder.</div>
+    {% endif %}
+
+    <div class="fg">
+      <span class="fg-label">Cutoff (out of 200)</span>
+      <input type="number" id="cutoffInput" min="0" max="200" step="0.25" value="180"/>
+    </div>
+
+    <div class="fg">
+      <span class="fg-label">Community</span>
+      <select id="communitySelect">
+        {% for c in communities %}
+        <option value="{{ c }}">{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Location filter (searches city keyword in college name) -->
+    <div class="fg loc-fg">
+      <span class="fg-label">City / Location</span>
+      <select id="locationSelect">
+        <option value="">All Cities</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Coimbatore">Coimbatore</option>
+        <option value="Madurai">Madurai</option>
+        <option value="Trichy">Trichy / Tiruchirappalli</option>
+        <option value="Salem">Salem</option>
+        <option value="Erode">Erode</option>
+        <option value="Tirunelveli">Tirunelveli</option>
+        <option value="Vellore">Vellore</option>
+        <option value="Thanjavur">Thanjavur</option>
+        <option value="Tiruppur">Tiruppur</option>
+        <option value="Cuddalore">Cuddalore</option>
+        <option value="Kancheepuram">Kancheepuram</option>
+        <option value="Nagercoil">Nagercoil</option>
+        <option value="Dindigul">Dindigul</option>
+        <option value="Pollachi">Pollachi</option>
+      </select>
+    </div>
+
+    <!-- Branch multi-select -->
+    <div class="fg branch-fg">
+      <span class="fg-label">Branches <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.65rem">(optional)</span></span>
+      <div class="branch-select-wrap">
+        <div class="branch-display" id="branchDisplay" onclick="toggleBranchDrop()">
+          <span class="bd-placeholder" id="bdPlaceholder">All branches</span>
+        </div>
+        <div class="branch-dropdown" id="branchDropdown">
+          <div class="bd-search"><input type="text" id="branchSearch" placeholder="Search branch…" oninput="filterBranches()" onclick="event.stopPropagation()"/></div>
+          <div id="branchOptions"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-pill">
+      <strong>Categories</strong>
+      🔴 Dream — above your score<br>
+      🟠 Ambitious — within ±5<br>
+      🟢 Safe — 3+ below yours
+    </div>
+
+    <button class="btn-predict" id="predictBtn" onclick="runPredict()" {% if not ml_available %}disabled{% endif %}>
+      Get Colleges →
+    </button>
+
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results-wrap">
+  <div class="results-empty" id="emptyState">
+    <div class="empty-icon">🎓</div>
+    <h3>Your recommendations will appear here</h3>
+    <p>Select your cutoff, community, and optional city/branch filters above, then click <strong>Get Colleges</strong></p>
+  </div>
+  <div class="loading-state" id="loadingState">
+    <div class="spinner"></div>
+    <p style="color:var(--muted)">Analysing colleges…</p>
+  </div>
+  <div id="resultsContent" style="display:none">
+    <div class="summary-bar" id="summaryBar"></div>
+    <div class="cat-section" id="dreamSection"></div>
+    <div class="cat-section" id="ambitiousSection"></div>
+    <div class="cat-section" id="safeSection"></div>
+  </div>
+</div>
+
+<footer>
+  <strong>TNEA Counsellor</strong> · Predictions based on historical data · Not officially affiliated with TNEA
+</footer>
+
+<script>
+/* ══ TERMS POPUP ══ */
+function acceptTerms(){
+  document.getElementById('termsOverlay').style.display='none';
+  sessionStorage.setItem('tnea_terms_accepted','1');
+}
+if(sessionStorage.getItem('tnea_terms_accepted')==='1'){
+  document.getElementById('termsOverlay').style.display='none';
+}
+
+/* ══ BRANCH MULTI-SELECT ══ */
+const ALL_BRANCHES = {{ branches | tojson }};
+let selectedBranches = new Set();
+
+function buildBranchOptions(filter=''){
+  const cont=document.getElementById('branchOptions');
+  const list=filter?ALL_BRANCHES.filter(b=>b.toLowerCase().includes(filter.toLowerCase())):ALL_BRANCHES;
+  cont.innerHTML=list.map(b=>`
+    <div class="bd-option ${selectedBranches.has(b)?'checked':''}" onclick="toggleBranch('${b.replace(/'/g,"\\'")}',this)">
+      <input type="checkbox" ${selectedBranches.has(b)?'checked':''} onclick="event.stopPropagation()"/> ${b}
+    </div>`).join('');
+}
+function toggleBranch(name,el){
+  if(selectedBranches.has(name)){selectedBranches.delete(name);el.classList.remove('checked')}
+  else{selectedBranches.add(name);el.classList.add('checked')}
+  el.querySelector('input').checked=selectedBranches.has(name);
+  updateBranchDisplay();
+}
+function updateBranchDisplay(){
+  const disp=document.getElementById('branchDisplay');
+  disp.querySelectorAll('.bd-tag').forEach(t=>t.remove());
+  const ph=document.getElementById('bdPlaceholder');
+  if(selectedBranches.size===0){ph.style.display=''}
+  else{
+    ph.style.display='none';
+    [...selectedBranches].slice(0,2).forEach(b=>{
+      const tag=document.createElement('span');tag.className='bd-tag';
+      tag.textContent=b.length>16?b.slice(0,14)+'…':b;disp.insertBefore(tag,ph);
+    });
+    if(selectedBranches.size>2){
+      const more=document.createElement('span');more.className='bd-tag';
+      more.textContent='+'+( selectedBranches.size-2)+' more';disp.appendChild(more);
+    }
+  }
+}
+function toggleBranchDrop(){
+  const dd=document.getElementById('branchDropdown');
+  dd.classList.toggle('open');document.getElementById('branchDisplay').classList.toggle('open');
+  if(dd.classList.contains('open'))buildBranchOptions();
+}
+function filterBranches(){buildBranchOptions(document.getElementById('branchSearch').value)}
+document.addEventListener('click',e=>{
+  const wrap=document.querySelector('.branch-select-wrap');
+  if(wrap&&!wrap.contains(e.target)){
+    document.getElementById('branchDropdown').classList.remove('open');
+    document.getElementById('branchDisplay').classList.remove('open');
+  }
+});
+
+/* ══ PREDICT ══ */
+async function runPredict(){
+  const btn    = document.getElementById('predictBtn');
+  const cutoff = parseFloat(document.getElementById('cutoffInput').value);
+  const comm   = document.getElementById('communitySelect').value;
+  const locVal = document.getElementById('locationSelect').value;
+  // Handle Trichy alias
+  const locKeywords = locVal==='Trichy' ? ['Trichy','Tiruchirappalli','Trichirappalli'] : (locVal?[locVal]:[]);
+  const branches = [...selectedBranches];
+
+  if(isNaN(cutoff)||cutoff<0||cutoff>200){alert('Please enter a valid cutoff between 0 and 200.');return}
+
+  document.getElementById('emptyState').style.display     = 'none';
+  document.getElementById('loadingState').style.display   = 'block';
+  document.getElementById('resultsContent').style.display = 'none';
+  btn.disabled=true;btn.textContent='Predicting…';
+
+  try{
+    const res  = await fetch('/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cutoff,community:comm,branches})});
+    const data = await res.json();
+    if(data.error){alert(data.error);return}
+
+    // Apply location filter client-side (search city keyword in college name)
+    function locFilter(arr){
+      if(!locKeywords.length) return arr;
+      return arr.filter(r=>locKeywords.some(kw=>r['College Name'].toLowerCase().includes(kw.toLowerCase())));
+    }
+    const dream     = locFilter(data.dream);
+    const ambitious = locFilter(data.ambitious);
+    const safe      = locFilter(data.safe);
+
+    // Count UNIQUE colleges only (not departments/branches)
+    function uniqueColleges(arr){
+      return new Set(arr.map(r=>r['College Name'])).size;
+    }
+    const uDream     = uniqueColleges(dream);
+    const uAmbitious = uniqueColleges(ambitious);
+    const uSafe      = uniqueColleges(safe);
+    const uTotal     = new Set([...dream,...ambitious,...safe].map(r=>r['College Name'])).size;
+
+    document.getElementById('summaryBar').innerHTML=`
+      <div class="sum-card dream">
+        <span class="sum-icon">🔴</span>
+        <div>
+          <div class="sum-num">${uDream}</div>
+          <div class="sum-lbl">Dream Colleges</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:2px">${dream.length} dept. records</div>
+        </div>
+      </div>
+      <div class="sum-card ambitious">
+        <span class="sum-icon">🟠</span>
+        <div>
+          <div class="sum-num">${uAmbitious}</div>
+          <div class="sum-lbl">Ambitious Colleges</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:2px">${ambitious.length} dept. records</div>
+        </div>
+      </div>
+      <div class="sum-card safe">
+        <span class="sum-icon">🟢</span>
+        <div>
+          <div class="sum-num">${uSafe}</div>
+          <div class="sum-lbl">Safe Colleges</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:2px">${safe.length} dept. records</div>
+        </div>
+      </div>`;
+
+    const locNote = locVal ? ` in <strong>${locVal}</strong>` : '';
+    renderCat('dreamSection',    dream,    'dream',    '🔴 Dream Colleges',    'Predicted cutoff is higher than your score');
+    renderCat('ambitiousSection',ambitious,'ambitious','🟠 Ambitious Colleges','Close to your cutoff — realistic with good chance');
+    renderCat('safeSection',     safe,     'safe',     '🟢 Safe Colleges',     'Your score is comfortably above predicted cutoff');
+
+    document.getElementById('loadingState').style.display   = 'none';
+    document.getElementById('resultsContent').style.display = 'block';
+    document.getElementById('resultsContent').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){
+    alert('Error: '+e.message);
+    document.getElementById('loadingState').style.display='none';
+    document.getElementById('emptyState').style.display='block';
+  }finally{btn.disabled=false;btn.textContent='Get Colleges →'}
+}
+
+function renderCat(id,rows,cls,title,desc){
+  const MAX=25;
+  const uniqueCount = new Set(rows.map(r=>r['College Name'])).size;
+  document.getElementById(id).innerHTML=`
+    <div class="cat-header ${cls}">
+      <div class="cat-dot"></div>
+      <span class="cat-title-text">${title}</span>
+      <span class="cat-desc">— ${desc}</span>
+      <span class="cat-count">${uniqueCount} colleges · ${rows.length} depts</span>
+    </div>
+    <div class="table-wrap">
+      ${rows.length===0
+        ?'<div class="empty-cat">No colleges in this category for your filters. Try removing the city filter or selecting different branches.</div>'
+        :`<table>
+            <thead><tr><th>#</th><th>College &amp; Branch</th><th>Predicted Cutoff</th></tr></thead>
+            <tbody>${rows.slice(0,MAX).map((r,i)=>`
+              <tr>
+                <td style="color:var(--muted);font-size:.78rem">${i+1}</td>
+                <td>
+                  <div class="college-name">${r['College Name']}</div>
+                  <div class="branch-name">${r['Branch Name']}</div>
+                </td>
+                <td><span class="cutoff-badge ${cls}">${(+r['Predicted_Cutoff']).toFixed(2)}</span></td>
+              </tr>`).join('')}</tbody>
+          </table>
+          ${rows.length>MAX?`<div class="more-note">Showing top ${MAX} of ${rows.length} colleges</div>`:''}`
+      }
+    </div>`;
+}
+
+/* Pre-fill cutoff from homepage calculator */
+const urlCutoff = new URLSearchParams(window.location.search).get('cutoff');
+if(urlCutoff) document.getElementById('cutoffInput').value=parseFloat(urlCutoff).toFixed(2);
+</script>
+</body>
+</html>
