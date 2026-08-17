@@ -1,0 +1,17 @@
+# Python bytecode and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+.gh/
+
+# Editor and operating-system metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
