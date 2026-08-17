@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AI Counsellor — TNEA Counsellor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#f05a22;--orange-light:#ff7043;--orange-pale:#fff3ee;
+  --blue:#1a3c8f;--blue-light:#e8eeff;
+  --text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;
+  --white:#ffffff;--bg:#f8f9fc;
+  --font:'Plus Jakarta Sans',sans-serif;--serif:'Fraunces',serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 5vw;height:64px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--orange-light));display:grid;place-items:center;font-size:1.1rem}
+.logo-text{font-weight:800;font-size:1.1rem;color:var(--text)}
+.logo-text span{color:var(--orange)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.85rem;font-weight:500;padding:7px 14px;border-radius:8px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{background:var(--orange-pale);color:var(--orange)}
+
+.chat-layout{display:grid;grid-template-columns:280px 1fr;flex:1;overflow:hidden}
+@media(max-width:768px){.chat-layout{grid-template-columns:1fr}}
+
+.chat-sidebar{background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.sidebar-top{padding:24px 20px 16px}
+.sidebar-top h2{font-family:var(--serif);font-size:1.15rem;font-weight:900}
+.sidebar-top p{color:var(--muted);font-size:.78rem;margin-top:4px;line-height:1.5}
+.sidebar-section{padding:0 12px 16px}
+.sidebar-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:4px 8px;margin-bottom:6px}
+.quick-btn{width:100%;background:none;border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:left;font-family:var(--font);font-size:.78rem;color:var(--text);cursor:pointer;transition:all .2s;margin-bottom:6px;line-height:1.4;display:flex;align-items:flex-start;gap:8px}
+.quick-btn:hover{background:var(--orange-pale);border-color:var(--orange);color:var(--orange)}
+.quick-icon{font-size:.9rem;flex-shrink:0;margin-top:1px}
+.topic-chip{display:inline-block;background:var(--bg);border:1px solid var(--border);padding:5px 12px;border-radius:99px;font-size:.72rem;font-weight:600;color:var(--muted);cursor:pointer;margin:0 4px 6px 0;transition:all .2s}
+.topic-chip:hover{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+.sidebar-divider{height:1px;background:var(--border);margin:4px 12px 16px}
+.bot-card{margin:0 12px 16px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:16px}
+.bot-card-title{font-weight:800;font-size:.85rem;color:#fff;margin-bottom:6px}
+.bot-card p{font-size:.75rem;color:rgba(255,255,255,.5);line-height:1.6}
+.bot-status{display:flex;align-items:center;gap:6px;margin-top:10px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-text{font-size:.72rem;color:rgba(255,255,255,.5)}
+
+/* Voice tip card */
+.voice-tip{margin:0 12px 16px;background:linear-gradient(135deg,rgba(240,90,34,.12),rgba(240,90,34,.06));border:1px solid rgba(240,90,34,.2);border-radius:12px;padding:14px}
+.vt-title{font-weight:800;font-size:.82rem;color:var(--orange);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.vt-body{font-size:.75rem;color:var(--muted);line-height:1.6}
+
+.chat-main{display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.chat-header{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.chat-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#2e5fd4);display:grid;place-items:center;font-size:1.1rem;flex-shrink:0}
+.chat-header-info h3{font-weight:800;font-size:.95rem}
+.chat-header-info p{font-size:.75rem;color:var(--muted)}
+.online-badge{margin-left:auto;display:flex;align-items:center;gap:5px;background:#f0fdf4;border:1px solid #bbf7d0;padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:700;color:#16a34a}
+
+.messages-area{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:18px;scrollbar-width:thin;scrollbar-color:#e5e7eb transparent}
+.msg{display:flex;gap:10px;animation:msgIn .25s ease}
+.msg.user{flex-direction:row-reverse}
+.msg-avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;flex-shrink:0;margin-top:2px}
+.msg.bot  .msg-avatar{background:var(--blue-light)}
+.msg.user .msg-avatar{background:var(--orange-pale)}
+.msg-bubble{max-width:75%;padding:13px 16px;border-radius:16px;font-size:.88rem;line-height:1.65}
+.msg.bot  .msg-bubble{background:var(--white);border:1px solid var(--border);border-top-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.msg.user .msg-bubble{background:linear-gradient(135deg,var(--orange),var(--orange-light));color:#fff;border-top-right-radius:4px}
+.msg-bubble strong{color:var(--blue)}
+.msg.user .msg-bubble strong{color:#fff;text-decoration:underline}
+.msg-bubble ul{padding-left:16px;margin:6px 0}
+.msg-bubble li{margin:4px 0}
+.msg-time{font-size:.68rem;color:var(--muted);margin-top:5px;text-align:right}
+.msg.user .msg-time{text-align:left}
+.typing-dots span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite;margin:0 2px}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}
+
+.suggestions-row{padding:0 24px 12px;display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0}
+.sug-btn{background:var(--white);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:99px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s}
+.sug-btn:hover{background:var(--orange-pale);border-color:var(--orange);color:var(--orange)}
+
+/* ── INPUT BAR WITH VOICE ── */
+.input-bar{background:var(--white);border-top:1px solid var(--border);padding:14px 20px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
+.chat-input{flex:1;background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:11px 16px;border-radius:12px;font-family:var(--font);font-size:.9rem;outline:none;resize:none;min-height:44px;max-height:120px;transition:border-color .2s;line-height:1.5}
+.chat-input:focus{border-color:var(--blue);background:#fff}
+.chat-input.listening{border-color:#e11d48;background:#fff1f3;animation:listenPulse 1s ease infinite}
+@keyframes listenPulse{0%,100%{border-color:#e11d48}50%{border-color:#f87171}}
+
+/* Voice button */
+.btn-voice{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;width:44px;height:44px;font-size:1.1rem;cursor:pointer;flex-shrink:0;transition:all .2s;display:grid;place-items:center}
+.btn-voice:hover{background:var(--orange-pale);border-color:var(--orange)}
+.btn-voice.recording{background:#fff1f3;border-color:#e11d48;animation:listenPulse 1s ease infinite}
+.btn-voice.no-support{opacity:.35;cursor:not-allowed}
+
+/* Voice status pill */
+.voice-status{display:none;align-items:center;gap:8px;padding:6px 14px;background:#fff1f3;border:1px solid #fecdd3;border-radius:99px;font-size:.76rem;color:#e11d48;font-weight:600;margin-bottom:6px;flex-shrink:0}
+.voice-status.visible{display:flex}
+.vs-dot{width:8px;height:8px;border-radius:50%;background:#e11d48;animation:pulse 1s infinite}
+
+.btn-send{background:linear-gradient(135deg,var(--blue),#2e5fd4);color:#fff;border:none;border-radius:12px;width:44px;height:44px;font-size:1rem;cursor:pointer;flex-shrink:0;transition:opacity .2s;display:grid;place-items:center}
+.btn-send:hover{opacity:.85}
+.btn-send:disabled{opacity:.4;cursor:default}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">🎓</div>
+    <div class="logo-text">TNEA<span>Counsellor</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/predictor">Predictor</a>
+    <a href="/chatbot" class="active">AI Chat</a>
+    <a href="https://www.tneaonline.org" target="_blank">Official TNEA ↗</a>
+  </div>
+</nav>
+
+<div class="chat-layout">
+
+  <!-- SIDEBAR -->
+  <div class="chat-sidebar">
+    <div class="sidebar-top">
+      <h2>💬 AI Counsellor</h2>
+      <p>Ask anything about TNEA admissions, colleges &amp; branches</p>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Quick Questions</div>
+      <button class="quick-btn" onclick="askQuick(this)"><span class="quick-icon">📄</span>What documents are needed for TNEA counselling?</button>
+      <button class="quick-btn" onclick="askQuick(this)"><span class="quick-icon">🏫</span>What are the top CSE colleges in Tamil Nadu?</button>
+      <button class="quick-btn" onclick="askQuick(this)"><span class="quick-icon">🔢</span>How is the TNEA cutoff calculated?</button>
+      <button class="quick-btn" onclick="askQuick(this)"><span class="quick-icon">💰</span>What is the fee structure for government engineering colleges?</button>
+      <button class="quick-btn" onclick="askQuick(this)"><span class="quick-icon">📅</span>What are the TNEA 2025 counselling dates?</button>
+      <button class="quick-btn" onclick="askQuick(this)"><span class="quick-icon">🔄</span>Can I change my branch after allotment?</button>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Browse Topics</div>
+      <span class="topic-chip" onclick="askTopic(this)">Cutoff Marks</span>
+      <span class="topic-chip" onclick="askTopic(this)">Branch Selection</span>
+      <span class="topic-chip" onclick="askTopic(this)">Documents</span>
+      <span class="topic-chip" onclick="askTopic(this)">Fee Structure</span>
+      <span class="topic-chip" onclick="askTopic(this)">NIT Colleges</span>
+      <span class="topic-chip" onclick="askTopic(this)">Government Colleges</span>
+      <span class="topic-chip" onclick="askTopic(this)">Reservation</span>
+      <span class="topic-chip" onclick="askTopic(this)">Lateral Entry</span>
+      <span class="topic-chip" onclick="askTopic(this)">Scholarship</span>
+      <span class="topic-chip" onclick="askTopic(this)">Hostel &amp; Campus</span>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- Voice tip -->
+    <div class="voice-tip" id="voiceTip">
+      <div class="vt-title">🎤 Voice Input Available</div>
+      <div class="vt-body">Click the microphone button to ask your question by speaking instead of typing. Speak clearly in English.</div>
+    </div>
+
+    <div class="bot-card">
+      <div class="bot-card-title">🤖 About This AI</div>
+      <p>Powered by GPT-4o-mini with TNEA-specific knowledge covering Anna University affiliated colleges.</p>
+      <div class="bot-status">
+        <div class="status-dot"></div>
+        <span class="status-text">Online · Ready to help</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT MAIN -->
+  <div class="chat-main">
+
+    <div class="chat-header">
+      <div class="chat-avatar">🤖</div>
+      <div class="chat-header-info">
+        <h3>TNEA Counsellor AI</h3>
+        <p>Specialist in Tamil Nadu Engineering Admissions · Text &amp; Voice</p>
+      </div>
+      <div class="online-badge">● Online</div>
+    </div>
+
+    <div class="messages-area" id="messagesArea">
+      <div class="msg bot">
+        <div class="msg-avatar">🤖</div>
+        <div>
+          <div class="msg-bubble">
+            👋 Hello! I'm your <strong>TNEA Counsellor AI</strong>.<br><br>
+            I can help you with everything about Tamil Nadu Engineering Admissions — cutoffs, branch selection, college comparisons, document checklists, fees, and counselling procedures.<br><br>
+            You can type your question or <strong>click the 🎤 microphone button</strong> to ask by voice!
+          </div>
+          <div class="msg-time">Just now</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="suggestions-row" id="suggestionsRow">
+      <button class="sug-btn" onclick="sendSuggestion(this)">🎯 Best colleges for cutoff 180?</button>
+      <button class="sug-btn" onclick="sendSuggestion(this)">📋 Document checklist</button>
+      <button class="sug-btn" onclick="sendSuggestion(this)">🔀 CSE vs IT — which is better?</button>
+      <button class="sug-btn" onclick="sendSuggestion(this)">🏛️ Top government colleges</button>
+    </div>
+
+    <!-- Voice status indicator -->
+    <div class="voice-status" id="voiceStatus">
+      <div class="vs-dot"></div>
+      <span id="voiceStatusText">Listening… speak now</span>
+    </div>
+
+    <div class="input-bar">
+      <textarea class="chat-input" id="chatInput" rows="1"
+        placeholder="Ask about TNEA counselling, colleges, cutoffs… or use 🎤"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+        oninput="autoResize(this)"></textarea>
+      <button class="btn-voice" id="voiceBtn" onclick="toggleVoice()" title="Voice input">🎤</button>
+      <button class="btn-send" id="sendBtn" onclick="sendChat()" title="Send">➤</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let chatHistory = [];
+let recognition = null;
+let isListening = false;
+
+/* ── Voice Recognition Setup ── */
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const voiceBtn = document.getElementById('voiceBtn');
+const voiceStatus = document.getElementById('voiceStatus');
+const voiceStatusText = document.getElementById('voiceStatusText');
+const chatInput = document.getElementById('chatInput');
+
+if (!SpeechRecognition) {
+  voiceBtn.classList.add('no-support');
+  voiceBtn.title = 'Voice input not supported in this browser. Try Chrome.';
+  document.getElementById('voiceTip').innerHTML = '<div class="vt-title">🎤 Voice Not Supported</div><div class="vt-body">Your browser does not support voice input. Please use Google Chrome for voice functionality.</div>';
+} else {
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-IN'; // Indian English
+
+  recognition.onstart = () => {
+    isListening = true;
+    voiceBtn.classList.add('recording');
+    voiceBtn.textContent = '⏹️';
+    chatInput.classList.add('listening');
+    chatInput.placeholder = 'Listening… speak your question';
+    voiceStatus.classList.add('visible');
+    voiceStatusText.textContent = 'Listening… speak now';
+  };
+
+  recognition.onresult = (e) => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    chatInput.value = final || interim;
+    autoResize(chatInput);
+    if (final) voiceStatusText.textContent = 'Got it! Sending…';
+  };
+
+  recognition.onend = () => {
+    isListening = false;
+    voiceBtn.classList.remove('recording');
+    voiceBtn.textContent = '🎤';
+    chatInput.classList.remove('listening');
+    chatInput.placeholder = 'Ask about TNEA counselling, colleges, cutoffs… or use 🎤';
+    voiceStatus.classList.remove('visible');
+    // Auto-send if text was captured
+    if (chatInput.value.trim()) {
+      setTimeout(sendChat, 300);
+    }
+  };
+
+  recognition.onerror = (e) => {
+    isListening = false;
+    voiceBtn.classList.remove('recording');
+    voiceBtn.textContent = '🎤';
+    chatInput.classList.remove('listening');
+    voiceStatus.classList.remove('visible');
+    const msgs = {
+      'no-speech':'No speech detected. Please try again.',
+      'audio-capture':'Microphone not found. Please check permissions.',
+      'not-allowed':'Microphone permission denied. Please allow mic access.',
+      'network':'Network error. Please check your connection.'
+    };
+    const errMsg = msgs[e.error] || `Voice error: ${e.error}`;
+    appendMsg('bot', '⚠️ ' + errMsg);
+  };
+}
+
+function toggleVoice() {
+  if (voiceBtn.classList.contains('no-support')) {
+    alert('Voice input is not supported in this browser. Please use Google Chrome.');
+    return;
+  }
+  if (isListening) {
+    recognition.stop();
+  } else {
+    chatInput.value = '';
+    recognition.start();
+  }
+}
+
+/* ── Chat Logic ── */
+function now() {
+  return new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
+}
+
+async function sendChat() {
+  const input   = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const question = input.value.trim();
+  if (!question) return;
+  document.getElementById('suggestionsRow').style.display = 'none';
+  appendMsg('user', question);
+  chatHistory.push({role:'user', content:question});
+  input.value = ''; input.style.height = '44px';
+  sendBtn.disabled = true;
+  const typingId = appendTyping();
+  try {
+    const res  = await fetch('/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({question, history:chatHistory.slice(-12)})});
+    const data = await res.json();
+    removeEl(typingId);
+    const answer = data.answer || '⚠️ No response.';
+    appendMsg('bot', answer);
+    chatHistory.push({role:'assistant', content:answer});
+  } catch(e) {
+    removeEl(typingId);
+    appendMsg('bot', '⚠️ Could not connect to AI service. Please check your API key in app.py.');
+  } finally {
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+function sendSuggestion(btn) {
+  chatInput.value = btn.textContent.replace(/^[🎯📋🔀🏛️]\s*/, '').trim();
+  sendChat();
+}
+
+function askQuick(btn) {
+  chatInput.value = btn.querySelector('.quick-icon').nextSibling.textContent.trim();
+  chatInput.focus();
+}
+
+function askTopic(chip) {
+  chatInput.value = 'Tell me about ' + chip.textContent.trim() + ' in TNEA';
+  chatInput.focus();
+}
+
+function appendMsg(role, text) {
+  const area = document.getElementById('messagesArea');
+  const div  = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `
+    <div class="msg-avatar">${role==='bot'?'🤖':'🧑'}</div>
+    <div>
+      <div class="msg-bubble">${formatText(text)}</div>
+      <div class="msg-time">${now()}</div>
+    </div>`;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function appendTyping() {
+  const area = document.getElementById('messagesArea');
+  const div  = document.createElement('div');
+  const id   = 'typing-' + Date.now();
+  div.id = id; div.className = 'msg bot';
+  div.innerHTML = `<div class="msg-avatar">🤖</div><div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div></div>`;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+  return id;
+}
+
+function removeEl(id) { const el=document.getElementById(id); if(el) el.remove(); }
+
+function formatText(t) {
+  return t
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/\n/g,'<br>');
+}
+
+function autoResize(el) {
+  el.style.height = '44px';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+</script>
+</body>
+</html>
